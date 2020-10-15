@@ -63,7 +63,7 @@ Some of the keyspace metrics include the following metrics.
 ## Executing from the AWS CLI
 In this example we create a new CloudWatch dashboard containing metrics for an Amazon Keyspaces table. The following code snippet uses the AWS CLI to execute CloudFormation template from this GitHub repository. The script will pipe the contents of keyspaces-table-cw.yaml into an environment variable which we then pass into the `--template-body` parameter. Stack name and CloudWatch dashboard will be generated for you, but you must provide the following parameters for the below script to work.
 
-parameters script.
+In the script below, replace the following parameters with your table information
 * `keyspace_name` The name of your table's keyspace
 * `table_name` The name of your table
 * `region_name` The name of the region where your table resides
@@ -75,8 +75,9 @@ git clone https://github.com/aws-samples/amazon-keyspaces-cloudwatch-cloudformat
 
 cd amazon-keyspaces-cloudwatch-cloudformation-templates
 
-export keyspace_name=tlp_stress
-export table_name=random_access
+#your table info here
+export keyspace_name=my_keyspace
+export table_name=my_table
 export region_name=us-east-1
 
 export mytemplate=$(cat keyspaces-table-cw.yaml)
