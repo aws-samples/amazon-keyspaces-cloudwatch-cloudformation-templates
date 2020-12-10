@@ -317,68 +317,6 @@ Resources:
         },
         {
             "type": "metric",
-            "x": 0,
-            "y": 42,
-            "width": 9,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ { "expression": "(m1+m2+m3+m4)", "label": "System Errors", "id": "e1", "region": "${CassandraRegion}", "period": 3600, "color": "#ff7f0e" } ],
-                    [ { "expression": "m5+m6+m7+m8", "label": "Successful Operations", "id": "e2", "color": "#2ca02c", "region": "${CassandraRegion}" } ],
-                    [ "AWS/Cassandra", "SystemErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#2ca02c", "id": "m1", "visible": false } ],
-                    [ "...", "UPDATE", { "color": "#ff7f0e", "id": "m2", "visible": false } ],
-                    [ "...", "DELETE", { "color": "#d62728", "id": "m3", "visible": false } ],
-                    [ "...", "SELECT", { "color": "#d62728", "id": "m4", "visible": false } ],
-                    [ ".", "SuccessfulRequestCount", ".", ".", ".", ".", ".", "INSERT", { "color": "#2ca02c", "id": "m5", "visible": false } ],
-                    [ "...", "UPDATE", { "color": "#ff7f0e", "id": "m6", "visible": false } ],
-                    [ "...", "DELETE", { "color": "#d62728", "id": "m7", "visible": false } ],
-                    [ "...", "SELECT", { "color": "#d62728", "id": "m8", "visible": false } ]
-                ],
-                "view": "pie",
-                "stacked": false,
-                "region": "${CassandraRegion}",
-                "title": "CQL Operation / System Errors Rate / per hour",
-                "stat": "Sum",
-                "period": 3600,
-                "setPeriodToTimeRange": true,
-                "labels": {
-                    "visible": true
-                }
-            }
-        },
-        {
-            "type": "metric",
-            "x": 9,
-            "y": 42,
-            "width": 9,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ { "expression": "m5+m6+m7+m8", "label": "Success", "id": "e1", "region": "${CassandraRegion}", "period": 3600, "color": "#9467bd" } ],
-                    [ { "expression": "m1+m2+m3+m4", "label": "System Errors", "id": "e2", "region": "${CassandraRegion}" } ],
-                    [ "AWS/Cassandra", "SystemErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#2ca02c", "id": "m1", "visible": false } ],
-                    [ "...", "UPDATE", { "color": "#ff7f0e", "id": "m2", "visible": false } ],
-                    [ "...", "DELETE", { "color": "#d62728", "id": "m3", "visible": false } ],
-                    [ "...", "SELECT", { "color": "#d62728", "id": "m4", "visible": false } ],
-                    [ ".", "SuccessfulRequestCount", ".", ".", ".", ".", ".", "INSERT", { "color": "#2ca02c", "id": "m5", "visible": false } ],
-                    [ "...", "UPDATE", { "color": "#ff7f0e", "id": "m6", "visible": false } ],
-                    [ "...", "DELETE", { "color": "#d62728", "id": "m7", "visible": false } ],
-                    [ "...", "SELECT", { "color": "#d62728", "id": "m8", "visible": false } ]
-                ],
-                "view": "pie",
-                "stacked": false,
-                "region": "${CassandraRegion}",
-                "title": "CQL Operation / System Errors Rate / per hour",
-                "stat": "Sum",
-                "period": 3600,
-                "setPeriodToTimeRange": true,
-                "labels": {
-                    "visible": true
-                }
-            }
-        },
-        {
-            "type": "metric",
             "x": 6,
             "y": 48,
             "width": 6,
@@ -444,6 +382,86 @@ Resources:
                 "period": 60,
                 "stat": "Sum",
                 "title": "Account Quota / Table Capacity"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 0,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\nTable throughput\n==\n\nTable-level metrics for read/write throughput. Amazon Keyspaces meters on-demand throughput by using read request units (RRUs) and write request units (WRUs), and provisioned throughput by using read capacity units (RCUs) and write capacity unites (WCUs). Learn more about [Read/Write Capacity Modes in Amazon Keyspaces](https://docs.aws.amazon.com/keyspaces/latest/devguide/ReadWriteCapacityMode.html).\n\n-   *Consumed*: The number of read/write units consumed per second. The dashboard displays consumed metrics for both on-demand and provisioned throughput.\n-   *Provisioned*: The number of provisioned capacity units. The dashboard displays provisioned metrics only for provisioned throughput. You can compare the provisioned metrics to the consumed metric to track your provisioned throughput utilization over time.\n\n**FAQ**\n\n**Why don\u0027t I see provisioned metrics?**\n\nOnly tables in provisioned capacity mode will report provisioned metrics. If you only are using on-demand throughput, then you will not see provisioned metrics.\n\n**Is it possible for tables to consume more capacity than provisioned?**\n\nYes. Amazon Keyspaces helps maintain availability during short traffic spikes by allowing tables to exceed provisioned capacity settings temporarily by using burst capacity. Burst capacity enables tables to use up to the last five minutes\u0027 worth of unused read and write capacity to accommodate traffic spikes.\n\n**What should I do if my traffic is exceeding my provisioned capacity consistently?**\n\nIf your application traffic is exceeding your provisioned capacity consistently, we recommend taking one or more of the following corrective actions:\n\n* Increase the provisioned capacity of your table.\n\n* Turn on auto scaling to enable Amazon Keyspaces to adjust your provisioned capacity settings automatically in response to sustained changes in your application traffic. Learn more about [Managing Amazon Keyspaces Throughput Capacity with Application Auto Scaling](https://docs.aws.amazon.com/keyspaces/latest/devguide/autoscaling.html).\n\n* Decrease the target utilization setting in your auto scaling policy to increase the provisioned capacity of your table more quickly.\n\n* Consider using on-demand capacity mode.\n\n**What should I do if my consumed capacity never comes close to my provisioned capacity?**\n\nIf your table\u0027s provisioned capacity utilization is low, you should consider one or more of the following actions to help optimize your throughput settings:\n\n* Turn on auto scaling to enable Amazon Keyspaces to adjust your provisioned capacity settings automatically in response to sustained changes in your application traffic. Learn more about [Managing Amazon Keyspaces Throughput Capacity with Application Auto Scaling](https://docs.aws.amazon.com/keyspaces/latest/devguide/autoscaling.html).\n* Increase the target utilization setting in your auto scaling policy to increase the provisioned capacity of your table more gradually.\n* Consider using on-demand capacity mode.\n\n**Can I have different scaling policies for reads and writes if I have more reads than writes, or vice versa?**\n\n-   Yes, you can configure provisioned capacity and scaling policies independently for reads and writes .\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 6,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\nSuccessful requests per second\n==\n\nThe number of successful CQL requests per second. This metric can differ from the consumed capacity metric because the consumed capacity metric depends on how many read/write units are consumed per CQL operation.\n\nFAQ\n---\n\n#### How should I configure my driver based on the number of requests?\n\nAmazon Keyspaces supports up to 3,000 requests per second, per TCP connection. The default behavior of most drivers is to establish a single connection to each peer IP address in the cluster. Although Amazon Keyspaces is serverless, the service exposes nine peer IP addresses to drivers for compatibility. Therefore, most drivers will support up to 27,000 requests per second by using the default settings. If you expect a single client to make more than 27,000 requests per second you should increase the number of connections per session setting.\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 12,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\nRequest Latency\n==\n\nThe successful requests to Amazon Keyspaces during the specified time period. *SuccessfulRequestLatency* can provide two different kinds of information:\n\n- The elapsed time for successful requests (*Minimum*, *Maximum*, *Sum*, or *Average*).\n\n*SuccessfulRequestLatency* reflects activity only within Amazon Keyspaces and does not take into account network latency or client-side activity.\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 18,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\nUser errors\n==\nUser errors indicates a client-side error, such as an invalid combination of parameters, an attempt to update a nonexistent table, or an incorrect request signature.\n\nExamples of user errors:\n\n* Exceeding account quota for table capacity\n* Exceeding account quota for account capacity\n* Exceeding provisioned capacity rate\n* Invalid CQL syntax\n* Table not found\n\n\n\n\n\n \n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 24,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\n# Exceeding Provisioned Capacity\n\nThe following metric will display number of WriteThrottleExceptions or ReadThrottleExceptions when consume capacity exceeds Provisioned Capacity. The application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions\n\n## FAQ\n\n#### How do I reduce errors as a result of exceeding provisioned capacity?\n* Turn on Auto-Scaling\n* Increase Current Provisioned Capacity\n* Decrease Target Capacity in Auto-Scaling Policy\n* Increase Mix/Max Capacity in Auto-Scaling Policy\n* Distribute Access over time\n\n#### What are some strategies for the application respond? \n* Retry \n* Retry with [Exponential Back-off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 30,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\nImbalanced workloads\n==\n\nThe number of WriteThrottleExceptions and ReadThrottleExceptions when consumed capacity is less than provisioned capacity. This may indicate an imbalanced workload or skewed access against a partition. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions.\n\n**FAQ**\n\n**How do I resolve imbalanced access in my application?**\n\n* You can resolve imbalanced access in your application by distributing traffic over partitions more evenly. \n* Consider randomizing reads and writes across partition keys or increasing the cardinality of your partition key to create more partitions. \n* Consider rate-limiting traffic to help prevent throttling exceptions by accessing over time.\n\n**What should I do if my request does not succeed due to a throttling exception?**\n\n* You can retry requests that do not succeed due to throttling exceptions. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 36,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\nSystem Errors\n==\n\nThe requests to Amazon Keyspaces that generate a ServerError during the specified time period. A ServerError usually indicates an internal service error.\n\n**FAQ**\n\n**What should I do if my request does not succeed due to an internal service error?**\n\n* You can retry requests that do not succeed due to an internal service error. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n\n* * * * *\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 42,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\n# Account Quotas\n\nReview default [Account Quotas](https://docs.aws.amazon.com/keyspaces/latest/devguide/quotas.html). You can view your service quotas in the [AWS Service Quotas console](https://console.aws.amazon.com/servicequotas/home#!/services/cassandra/quotas). \n\nAccountMaxWrites: The maximum number of read capacity units that can be used by an account. This limit does not apply to on-demand tables. \n\nAccountMaxReads: The maximum number of write capacity units that can be used by an account. This limit does not apply to on-demand tables or global secondary indexes. \n\nAccountMaxTableLevelWrites: The maximum number of write request units that can be used by a table of an account. For on-demand tables this limit caps the maximum write request units a table. \n\nAccountMaxTableLevelReads: The maximum number of read request units that can be used by a table of an account. For on-demand tables this limit caps the maximum read request units. \n"
             }
         }
     ]
