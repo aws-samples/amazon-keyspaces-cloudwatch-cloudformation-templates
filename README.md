@@ -87,6 +87,15 @@ export stack_name="cw-${dashboard_name}"
 aws cloudformation create-stack --stack-name "${stack_name}" --parameters ParameterKey=CloudwatchDashBoardNameParameter,ParameterValue=${dashboard_name} ParameterKey=CassandraKeyspaceParameter,ParameterValue=${keyspace_name} ParameterKey=CassandraTableParameter,ParameterValue=${table_name} ParameterKey=CassandraRegion,ParameterValue=${region_name} --template-body $mytemplate
 
 ```
+# Popular Keyspaces Repositories
+## Developer Tooling
+This repository provides a Docker image for common tooling for Amazon Keyspaces. Keyspaces for functional testing, light operations, and data migration.
+The toolkit is optimized for Amazon Keyspaces, but will also work with Apache Cassandra clusters.
+https://github.com/aws-samples/amazon-keyspaces-toolkit
+
+## Java Driver Helpers
+This repository contains driver policies, examples, and best practices when using the DataStax Java Driver with Amazon Keyspaces (for Apache Cassandra)
+https://github.com/aws-samples/amazon-keyspaces-java-driver-helpers
 
 # Security
 
