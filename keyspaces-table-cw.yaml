@@ -239,19 +239,17 @@ Resources:
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "IF(m5 > 1  && (m4/PERIOD(m4))<(m5*0.95) && m2>0, m2)", "label": "INSERT", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ],
-                    [ { "expression": "IF(m5 > 1  && (m4/PERIOD(m4))<(m5*0.95) && m3>0, m3)", "label": "UPDATE", "id": "e3", "region": "${CassandraRegion}", "color": "#ff7f0e" } ],
-                    [ { "expression": "IF(m5 > 1  && (m4/PERIOD(m4))<(m5*0.95) && m1>0, m1)", "label": "DELETE", "id": "e2", "region": "${CassandraRegion}", "color": "#d62728" } ],
-                    [ "AWS/Cassandra", "WriteThrottleEvents", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "DELETE", { "color": "#17becf", "id": "m1", "visible": false, "stat": "Sum" } ],
-                    [ "...", "INSERT", { "color": "#2ca02c", "id": "m2", "visible": false, "stat": "Sum" } ],
-                    [ "...", "UPDATE", { "color": "#9467bd", "id": "m3", "visible": false, "stat": "Sum" } ],
-                    [ ".", "ConsumedWriteCapacityUnits", ".", ".", ".", ".", { "id": "m4", "visible": false, "stat": "Sum" } ],
-                    [ ".", "ProvisionedWriteCapacityUnits", ".", ".", ".", ".", { "id": "m5", "visible": false } ]
+                    [ { "expression": "m1/PERIOD(m1)", "label": "INSERT", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ],
+                    [ { "expression": "m2/PERIOD(m2)", "label": "UPDATE", "id": "e2", "region": "${CassandraRegion}", "color": "#ff7f0e" } ],
+                    [ { "expression": "m3/PERIOD(m3)", "label": "DELETE", "id": "e3", "region": "${CassandraRegion}", "color": "#d62728" } ],
+                    [ "AWS/Cassandra", "StoragePartitionThroughputCapacityExceeded", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#17becf", "id": "m1", "visible": false, "stat": "Sum" } ],
+                    [ "...", "UPDATE", { "color": "#2ca02c", "id": "m2", "visible": false, "stat": "Sum" } ],
+                    [ "...", "DELETE", { "color": "#9467bd", "id": "m3", "visible": false, "stat": "Sum" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${CassandraRegion}",
-                "title": "Write / Potential Hotkey / Provisioned Capacity / per second",
+                "title": "Write / Storage Partition Throughput Capacity Exceeded / per second",
                 "stat": "Average",
                 "period": 60
             }
@@ -264,15 +262,13 @@ Resources:
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/Cassandra", "ReadThrottleEvents", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "color": "#17becf", "id": "m1", "visible": false } ],
-                    [ { "expression": "IF(m5>1 && m4/PERIOD(m4)<(m5*0.95) &&m1>0, m1)", "label": "SELECT", "id": "e1", "region": "${CassandraRegion}", "color": "#9467bd" } ],
-                    [ "AWS/Cassandra", "ConsumedReadCapacityUnits", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", { "id": "m4", "stat": "Sum", "visible": false } ],
-                    [ ".", "ProvisionedReadCapacityUnits", ".", ".", ".", ".", { "id": "m5", "visible": false } ]
+                    [ "AWS/Cassandra", "StoragePartitionThroughputCapacityExceeded", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "color": "#17becf", "id": "m1", "visible": false, "stat": "Sum"  } ],
+                    [ { "expression": "m1/PERIOD(m1)", "label": "SELECT", "id": "e1", "region": "${CassandraRegion}", "color": "#9467bd" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${CassandraRegion}",
-                "title": "Read / Potential Hot Key / Provisioned Capacity / per second",
+                "title": "Read / Storage Partition Throughput Capacity Exceeded  / Provisioned Capacity / per second",
                 "stat": "Average",
                 "period": 60
             }
@@ -441,7 +437,7 @@ Resources:
             "width": 6,
             "height": 6,
             "properties": {
-                "markdown": "\nImbalanced workloads\n==\n\nThe number of WriteThrottleExceptions and ReadThrottleExceptions when consumed capacity is less than provisioned capacity. This may indicate an imbalanced workload or skewed access against a partition. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions.\n\n**FAQ**\n\n**How do I resolve imbalanced access in my application?**\n\n* You can resolve imbalanced access in your application by distributing traffic over partitions more evenly. \n* Consider randomizing reads and writes across partition keys or increasing the cardinality of your partition key to create more partitions. \n* Consider rate-limiting traffic to help prevent throttling exceptions by accessing over time.\n\n**What should I do if my request does not succeed due to a throttling exception?**\n\n* You can retry requests that do not succeed due to throttling exceptions. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
+                "markdown": "\nStorage Partition Throughput Capacity Exceeded \n==\n\n This may indicate an imbalanced workload or skewed access against a partition. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions.\n\n**FAQ**\n\n**How do I resolve imbalanced access in my application?**\n\n* You can resolve imbalanced access in your application by distributing traffic over partitions more evenly. \n* Consider randomizing reads and writes across partition keys or increasing the cardinality of your partition key to create more partitions. \n* Consider rate-limiting traffic to help prevent throttling exceptions by accessing over time.\n\n**What should I do if my request does not succeed due to a throttling exception?**\n\n* You can retry requests that do not succeed due to throttling exceptions. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
             }
         },
         {
