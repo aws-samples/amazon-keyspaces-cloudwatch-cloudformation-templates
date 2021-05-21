@@ -74,11 +74,11 @@ Resources:
             "properties": {
                 "metrics": [
                     [ { "expression": "m1/PERIOD(m1)", "label": "INSERT", "id": "e1", "color": "#2ca02c", "region": "${CassandraRegion}" } ],
-                    [ { "expression": "m4/PERIOD(m4)", "label": "UPDATE", "id": "e3", "color": "#ff7f0e", "region": "${CassandraRegion}" } ],
-                    [ { "expression": "m2/PERIOD(m2)", "label": "DELETE", "id": "e2", "color": "#d62728", "region": "${CassandraRegion}" } ],
-                    [ "AWS/Cassandra", "SuccessfulRequestCount", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "DELETE", { "id": "m2", "label": "DELETE SuccessfulRequestCount", "visible": false, "color": "#ff9896" } ],
-                    [ "...", "INSERT", { "id": "m1", "label": "INSERT SuccessfulRequestCount", "color": "#98df8a", "visible": false } ],
-                    [ "...", "UPDATE", { "id": "m4", "label": "UPDATE SuccessfulRequestCount", "color": "#ffbb78", "visible": false } ]
+                    [ { "expression": "m2/PERIOD(m2)", "label": "UPDATE", "id": "e2", "color": "#ff7f0e", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m3/PERIOD(m3)", "label": "DELETE", "id": "e3", "color": "#d62728", "region": "${CassandraRegion}" } ],
+                    [ "AWS/Cassandra", "SuccessfulRequestCount", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "id": "m1", "label": "INSERT SuccessfulRequestCount", "visible": false, "color": "#ff9896" } ],
+                    [ "...", "UPDATE", { "id": "m2", "label": "UPDATE SuccessfulRequestCount", "color": "#98df8a", "visible": false } ],
+                    [ "...", "DELETE", { "id": "m3", "label": "DELETE SuccessfulRequestCount", "color": "#ffbb78", "visible": false } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -115,92 +115,6 @@ Resources:
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#2ca02c" } ],
-                    [ "...", "UPDATE", { "color": "#ff7f0e" } ],
-                    [ "...", "DELETE", { "color": "#d62728" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${CassandraRegion}",
-                "title": "Write / User Errors Sum / per minute",
-                "stat": "Sum",
-                "period": 60
-            }
-        },
-        {
-            "type": "metric",
-            "x": 9,
-            "y": 18,
-            "width": 9,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "label": "SELECT", "color": "#9467bd" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${CassandraRegion}",
-                "title": "Read / User Errors Sum / per minute",
-                "stat": "Sum",
-                "period": 60
-            }
-        },
-        {
-            "type": "metric",
-            "x": 0,
-            "y": 24,
-            "width": 9,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ { "expression": "IF(m5>1 && (m4/PERIOD(m4))>(m5*0.95) && (e2)>1, e2)", "label": "Exceeded Provisioned Capacity", "id": "e1", "region": "${CassandraRegion}", "color": "#bcbd22" } ],
-                    [ { "expression": "((m6/PERIOD(m6))+(m7/PERIOD(m7))+(m8/PERIOD(m8)))", "label": "Total WriteThrottleEvent Errors", "id": "e2", "visible": false, "region": "${CassandraRegion}" } ],
-                    [ "AWS/Cassandra", "WriteThrottleEvents", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "DELETE", { "color": "#17becf", "id": "m1", "visible": false } ],
-                    [ "...", "INSERT", { "color": "#2ca02c", "id": "m2", "visible": false } ],
-                    [ "...", "UPDATE", { "color": "#9467bd", "id": "m3", "visible": false } ],
-                    [ ".", "ConsumedWriteCapacityUnits", ".", ".", ".", ".", { "id": "m4", "visible": false } ],
-                    [ ".", "ProvisionedWriteCapacityUnits", ".", ".", ".", ".", { "id": "m5", "visible": false, "stat": "Average" } ],
-                    [ ".", "WriteThrottleEvents", ".", ".", ".", ".", "Operation", "INSERT", { "id": "m6", "visible": false } ],
-                    [ "...", "UPDATE", { "id": "m7", "visible": false } ],
-                    [ "...", "DELETE", { "id": "m8", "visible": false } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${CassandraRegion}",
-                "title": "Write / Likely Exceeding / Provisioned Capacity / per second",
-                "stat": "Sum",
-                "period": 60
-            }
-        },
-        {
-            "type": "metric",
-            "x": 9,
-            "y": 24,
-            "width": 9,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ { "expression": "IF(m5>1 && (m4/PERIOD(m4))>(m5*0.95) &&m1>1, m1/PERIOD(m1))", "label": "Exceeded Provisioned Capacity", "id": "e1", "region": "${CassandraRegion}", "color": "#17becf" } ],
-                    [ "AWS/Cassandra", "ReadThrottleEvents", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "color": "#17becf", "id": "m1", "visible": false, "stat": "Sum" } ],
-                    [ ".", "ConsumedReadCapacityUnits", ".", ".", ".", ".", { "id": "m4", "visible": false, "stat": "Sum" } ],
-                    [ ".", "ProvisionedReadCapacityUnits", ".", ".", ".", ".", { "id": "m5", "visible": false } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${CassandraRegion}",
-                "title": "Read  / Likely Exceeding / Provision Capacity / per second",
-                "stat": "Average",
-                "period": 60
-            }
-        },
-        {
-            "type": "metric",
-            "x": 0,
-            "y": 12,
-            "width": 9,
-            "height": 6,
-            "properties": {
-                "metrics": [
                     [ "AWS/Cassandra", "SuccessfulRequestLatency", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#2ca02c" } ],
                     [ "...", "UPDATE", { "color": "#ff7f0e" } ],
                     [ "...", "DELETE", { "color": "#d62728" } ]
@@ -216,7 +130,7 @@ Resources:
         {
             "type": "metric",
             "x": 9,
-            "y": 12,
+            "y": 18,
             "width": 9,
             "height": 6,
             "properties": {
@@ -234,7 +148,88 @@ Resources:
         {
             "type": "metric",
             "x": 0,
+            "y": 24,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#2ca02c" } ],
+                    [ "...", "UPDATE", { "color": "#ff7f0e" } ],
+                    [ "...", "DELETE", { "color": "#d62728" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${CassandraRegion}",
+                "title": "Write / User Errors Sum / per minute",
+                "stat": "Sum",
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 24,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "label": "SELECT", "color": "#9467bd" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${CassandraRegion}",
+                "title": "Read / User Errors Sum / per minute",
+                "stat": "Sum",
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
             "y": 30,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ { "expression": "m1/PERIOD(m1)", "label": "INSERT", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ],
+                    [ { "expression": "m2/PERIOD(m2)", "label": "UPDATE", "id": "e2", "color": "#ff7f0e", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m3/PERIOD(m3)", "label": "DELETE", "id": "e3", "color": "#d62728", "region": "${CassandraRegion}" } ],
+                    [ "AWS/Cassandra", "WriteThrottleEvents", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#17becf", "id": "m1", "visible": false } ],
+                    [ "...", "UPDATE", { "color": "#2ca02c", "id": "m2", "visible": false } ],
+                    [ "...", "DELETE", { "color": "#9467bd", "id": "m3", "visible": false } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${CassandraRegion}",
+                "title": "WriteThrottleEvents / per second",
+                "stat": "Sum",
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 30,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ { "expression": "m1/PERIOD(m1)", "label": "SELECT", "id": "e1", "region": "${CassandraRegion}", "color": "#9467bd" } ],
+                    [ "AWS/Cassandra", "ReadThrottleEvents", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "color": "#17becf", "id": "m1", "visible": false, "stat": "Sum" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${CassandraRegion}",
+                "title": "ReadThrottleEvents / per second",
+                "stat": "Average",
+                "period": 60
+            }
+        },
+
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 36,
             "width": 9,
             "height": 6,
             "properties": {
@@ -257,12 +252,12 @@ Resources:
         {
             "type": "metric",
             "x": 9,
-            "y": 30,
+            "y": 36,
             "width": 9,
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/Cassandra", "StoragePartitionThroughputCapacityExceeded", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "color": "#17becf", "id": "m1", "visible": false, "stat": "Sum"  } ],
+                    [ "AWS/Cassandra", "StoragePartitionThroughputCapacityExceeded", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "color": "#9467bd", "id": "m1", "visible": false, "stat": "Sum"  } ],
                     [ { "expression": "m1/PERIOD(m1)", "label": "SELECT", "id": "e1", "region": "${CassandraRegion}", "color": "#9467bd" } ]
                 ],
                 "view": "timeSeries",
@@ -276,7 +271,7 @@ Resources:
         {
             "type": "metric",
             "x": 0,
-            "y": 36,
+            "y": 42,
             "width": 9,
             "height": 6,
             "properties": {
@@ -296,7 +291,7 @@ Resources:
         {
             "type": "metric",
             "x": 9,
-            "y": 36,
+            "y": 42,
             "width": 9,
             "height": 6,
             "properties": {
@@ -313,8 +308,58 @@ Resources:
         },
         {
             "type": "metric",
-            "x": 6,
+            "x": 0,
             "y": 48,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ { "expression": "m1/PERIOD(m1)", "label": "BATCH", "id": "e1", "color": "#17becf", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m2/PERIOD(m2)", "label": "PREPARE", "id": "e2", "color": "#e377c2", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m3/PERIOD(m3)", "label": "EXECUTE", "id": "e3", "color": "#dbdb8d", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m4/PERIOD(m4)", "label": "USE", "id": "e4", "color": "#7f7f7f", "region": "${CassandraRegion}" } ],
+                    [ "AWS/Cassandra", "SuccessfulRequestCount", "Operation", "BATCH", { "id": "m1", "label": "BATCH", "visible": false, "color": "#17becf" } ],
+                    [ "...", "PREPARE", { "id": "m2", "label": "PREPARE", "color": "#e377c2", "visible": false } ],
+                    [ "...", "EXECUTE", { "id": "m3", "label": "EXECUTE", "color": "#dbdb8d", "visible": false } ],
+                    [ "...", "USE", { "id": "m4", "label": "USE", "color": "#c5b0d5", "visible": false } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "title": "Account / SuccessfulRequestCount / per second",
+                "region": "${CassandraRegion}",
+                "stat": "Sum",
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 48,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ { "expression": "m1/PERIOD(m1)", "label": "BATCH", "id": "e1", "color": "#17becf", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m2/PERIOD(m2)", "label": "PREPARE", "id": "e2", "color": "#e377c2", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m3/PERIOD(m3)", "label": "EXECUTE", "id": "e3", "color": "#dbdb8d", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m4/PERIOD(m4)", "label": "USE", "id": "e4", "color": "#7f7f7f", "region": "${CassandraRegion}" } ],
+                    [ "AWS/Cassandra", "SuccessfulRequestLatency", "Operation", "BATCH", { "id": "m1", "label": "BATCH", "visible": false, "color": "#17becf" } ],
+                    [ "...", "PREPARE", { "id": "m2", "label": "PREPARE", "color": "#e377c2", "visible": false } ],
+                    [ "...", "EXECUTE", { "id": "m3", "label": "EXECUTE", "color": "#dbdb8d", "visible": false } ],
+                    [ "...", "USE", { "id": "m4", "label": "USE", "color": "#c5b0d5", "visible": false } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "title": "Account / SuccessfulRequestLatency / per second",
+                "region": "${CassandraRegion}",
+                "stat": "Sum",
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 54,
             "width": 6,
             "height": 6,
             "properties": {
@@ -336,8 +381,8 @@ Resources:
         },
         {
             "type": "metric",
-            "x": 12,
-            "y": 48,
+            "x": 6,
+            "y": 54,
             "width": 6,
             "height": 6,
             "properties": {
@@ -359,8 +404,8 @@ Resources:
         },
         {
             "type": "metric",
-            "x": 0,
-            "y": 48,
+            "x": 12,
+            "y": 54,
             "width": 6,
             "height": 6,
             "properties": {
@@ -427,7 +472,7 @@ Resources:
             "width": 6,
             "height": 6,
             "properties": {
-                "markdown": "\n# Exceeding Provisioned Capacity\n\nThe following metric will display number of WriteThrottleExceptions or ReadThrottleExceptions when consume capacity exceeds Provisioned Capacity. The application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions\n\n## FAQ\n\n#### How do I reduce errors as a result of exceeding provisioned capacity?\n* Turn on Auto-Scaling\n* Increase Current Provisioned Capacity\n* Decrease Target Capacity in Auto-Scaling Policy\n* Increase Mix/Max Capacity in Auto-Scaling Policy\n* Distribute Access over time\n\n#### What are some strategies for the application respond? \n* Retry \n* Retry with [Exponential Back-off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)\n"
+                "markdown": "\nThrottleEvents\n==\nThe following metric will display number of WriteThrottleExceptions or ReadThrottleExceptions when exceeding capacity. The application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions\n\n## FAQ\n\n#### How do I reduce errors as a result of exceeding provisioned capacity?\n* Turn on Auto-Scaling\n* Increase Current Provisioned Capacity\n* Decrease Target Capacity in Auto-Scaling Policy\n* Increase Mix/Max Capacity in Auto-Scaling Policy\n* Distribute Access over time\n\n#### What are some strategies for the application respond? \n* Retry \n* Retry with [Exponential Back-off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)\n"
             }
         },
         {
@@ -449,11 +494,21 @@ Resources:
             "properties": {
                 "markdown": "\nSystem Errors\n==\n\nThe requests to Amazon Keyspaces that generate a ServerError during the specified time period. A ServerError usually indicates an internal service error.\n\n**FAQ**\n\n**What should I do if my request does not succeed due to an internal service error?**\n\n* You can retry requests that do not succeed due to an internal service error. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n\n* * * * *\n"
             }
-        },
+          },
         {
             "type": "text",
             "x": 18,
             "y": 42,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\nAccount Operations\n==\n\nThe requests against Amazon Keyspaces\u0027 system tables.\n\n**FAQ**\n\n**Do these operations consume capacity?**\n\n* No, These operations do not consumed capacity themselves. The operations represented here are executed against the system tables. Multiple tables can be involved in a single batch statement, the consumed capacity will be taken from the table specified in the individual statements contained in the batch.\n\n **Do these operations count towards the Max queries per connection quota?**\n\n* Yes, these operations are counted towards the Max queries per connection quota. Read more about [CQL Query Throughput Tuning](https://docs.aws.amazon.com/keyspaces/latest/devguide/functional-differences.html#functional-differences.query-throughput-tuning)\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 48,
             "width": 6,
             "height": 6,
             "properties": {
