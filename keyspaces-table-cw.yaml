@@ -131,7 +131,7 @@ Resources:
             "type": "metric",
             "x": 9,
             "y": 18,
-            "width": 9,
+            "width": 6,
             "height": 6,
             "properties": {
                 "metrics": [
@@ -141,6 +141,24 @@ Resources:
                 "stacked": false,
                 "region": "${CassandraRegion}",
                 "title": "Read / Successful Request Latency / per second",
+                "period": 300,
+                "stat": "Average"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 15,
+            "y": 18,
+            "width": 3,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/Cassandra", "ReturnedItemCountBySelect", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "color": "#c49c94", "label": "Rows from multi-select", "id": "m1", "stat": "Average" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${CassandraRegion}",
+                "title": "Avg Rows Returned",
                 "period": 300,
                 "stat": "Average"
             }
