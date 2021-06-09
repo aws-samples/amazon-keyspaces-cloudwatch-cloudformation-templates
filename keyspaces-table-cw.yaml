@@ -171,15 +171,19 @@ Resources:
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#2ca02c" } ],
-                    [ "...", "UPDATE", { "color": "#ff7f0e" } ],
-                    [ "...", "DELETE", { "color": "#d62728" } ],
-                    [ "...", "BATCH", { "color": "#17becf" } ]
+                    [ { "expression": "m1/PERIOD(m1)", "label": "INSERT", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ],
+                    [ { "expression": "m2/PERIOD(m2)", "label": "UPDATE", "id": "e2", "color": "#ff7f0e", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m3/PERIOD(m3)", "label": "DELETE", "id": "e3", "color": "#d62728", "region": "${CassandraRegion}" } ],
+                    [ { "expression": "m4/PERIOD(m4)", "label": "BATCH", "id": "e3", "color": "#17becf", "region": "${CassandraRegion}" } ],
+                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#2ca02c", "id": "m1", "visible": false  } ],
+                    [ "...", "UPDATE", { "color": "#ff7f0e", "id": "m2" } ],
+                    [ "...", "DELETE", { "color": "#d62728", "id": "m3" } ],
+                    [ "...", "BATCH", { "color": "#17becf", "id": "m4" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${CassandraRegion}",
-                "title": "Write / User Errors Sum / per minute",
+                "title": "Write / User Errors / per second",
                 "stat": "Sum",
                 "period": 60
             }
@@ -192,12 +196,13 @@ Resources:
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "label": "SELECT", "color": "#9467bd" } ]
+                    [ { "expression": "m1/PERIOD(m1)", "label": "SELECT", "id": "e1", "region": "${CassandraRegion}", "color": "#9467bd" } ],
+                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "label": "SELECT", "id": "m1", "color": "#9467bd" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${CassandraRegion}",
-                "title": "Read / User Errors Sum / per minute",
+                "title": "Read / User Errors / per second",
                 "stat": "Sum",
                 "period": 60
             }
