@@ -173,7 +173,8 @@ Resources:
                 "metrics": [
                     [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#2ca02c" } ],
                     [ "...", "UPDATE", { "color": "#ff7f0e" } ],
-                    [ "...", "DELETE", { "color": "#d62728" } ]
+                    [ "...", "DELETE", { "color": "#d62728" } ],
+                    [ "...", "BATCH", { "color": "#17becf" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -239,7 +240,7 @@ Resources:
                 "stacked": false,
                 "region": "${CassandraRegion}",
                 "title": "ReadThrottleEvents / per second",
-                "stat": "Average",
+                "stat": "Sum",
                 "period": 60
             }
         },
@@ -263,7 +264,7 @@ Resources:
                 "stacked": false,
                 "region": "${CassandraRegion}",
                 "title": "Write / Storage Partition Throughput Capacity Exceeded / per second",
-                "stat": "Average",
+                "stat": "Sum",
                 "period": 60
             }
         },
@@ -281,7 +282,7 @@ Resources:
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${CassandraRegion}",
-                "title": "Read / Storage Partition Throughput Capacity Exceeded  / Provisioned Capacity / per second",
+                "title": "Read / Storage Partition Throughput Capacity Exceeded  / per second",
                 "stat": "Average",
                 "period": 60
             }
@@ -290,6 +291,48 @@ Resources:
             "type": "metric",
             "x": 0,
             "y": 42,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ { "expression": "m1/PERIOD(m1)", "label": "INSERT", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ],
+                    [ { "expression": "m2/PERIOD(m2)", "label": "UPDATE", "id": "e2", "region": "${CassandraRegion}", "color": "#ff7f0e" } ],
+                    [ { "expression": "m3/PERIOD(m3)", "label": "DELETE", "id": "e3", "region": "${CassandraRegion}", "color": "#d62728" } ],
+                    [ "AWS/Cassandra", "PerConnectionRequestRateExceeded", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "INSERT", { "color": "#17becf", "id": "m1", "visible": false, "stat": "Sum" } ],
+                    [ "...", "UPDATE", { "color": "#2ca02c", "id": "m2", "visible": false, "stat": "Sum" } ],
+                    [ "...", "DELETE", { "color": "#9467bd", "id": "m3", "visible": false, "stat": "Sum" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${CassandraRegion}",
+                "title": "Write / Per Connection Request Rate Exceeded / per second",
+                "stat": "Average",
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 42,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/Cassandra", "PerConnectionRequestRateExceeded", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "color": "#9467bd", "id": "m1", "visible": false, "stat": "Sum"  } ],
+                    [ { "expression": "m1/PERIOD(m1)", "label": "SELECT", "id": "e1", "region": "${CassandraRegion}", "color": "#9467bd" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${CassandraRegion}",
+                "title": "Read / Per Connection Request Rate Exceeded  / per second",
+                "stat": "Average",
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 48,
             "width": 9,
             "height": 6,
             "properties": {
@@ -309,7 +352,7 @@ Resources:
         {
             "type": "metric",
             "x": 9,
-            "y": 42,
+            "y": 48,
             "width": 9,
             "height": 6,
             "properties": {
@@ -327,7 +370,7 @@ Resources:
         {
             "type": "metric",
             "x": 0,
-            "y": 48,
+            "y": 54,
             "width": 9,
             "height": 6,
             "properties": {
@@ -352,7 +395,7 @@ Resources:
         {
             "type": "metric",
             "x": 9,
-            "y": 48,
+            "y": 54,
             "width": 9,
             "height": 6,
             "properties": {
@@ -377,7 +420,7 @@ Resources:
         {
             "type": "metric",
             "x": 0,
-            "y": 54,
+            "y": 60,
             "width": 6,
             "height": 6,
             "properties": {
@@ -400,7 +443,7 @@ Resources:
         {
             "type": "metric",
             "x": 6,
-            "y": 54,
+            "y": 60,
             "width": 6,
             "height": 6,
             "properties": {
@@ -423,7 +466,7 @@ Resources:
         {
             "type": "metric",
             "x": 12,
-            "y": 54,
+            "y": 66,
             "width": 6,
             "height": 6,
             "properties": {
@@ -500,7 +543,7 @@ Resources:
             "width": 6,
             "height": 6,
             "properties": {
-                "markdown": "\nStorage Partition Throughput Capacity Exceeded \n==\n\n This may indicate an imbalanced workload or skewed access against a partition. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions.\n\n**FAQ**\n\n**How do I resolve imbalanced access in my application?**\n\n* You can resolve imbalanced access in your application by distributing traffic over partitions more evenly. \n* Consider randomizing reads and writes across partition keys or increasing the cardinality of your partition key to create more partitions. \n* Consider rate-limiting traffic to help prevent throttling exceptions by accessing over time.\n\n**What should I do if my request does not succeed due to a throttling exception?**\n\n* You can retry requests that do not succeed due to throttling exceptions. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
+                "markdown": "\nStorage Partition Throughput Capacity Exceeded \n==\n\n Requests to an Amazon Keyspaces storage partition that exceed the throughput capacity of the partition. Amazon Keyspaces storage partitions can support up to 1000 WCU/WRU per second or 3000 RCU/RRU per second, or a linear combination of the two. Logical Amazon Keyspaces partitions can span multiple storage partitions and are virtually unbounded in size. We recommend reviewing your data model to distribute read/write traffic across more Amazon Keyspaces logical partitions. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions.\n\n**FAQ**\n\n**How do I resolve imbalanced access in my application?**\n\n* You can resolve imbalanced access in your application by distributing traffic over partitions more evenly. \n* Consider randomizing reads and writes across partition keys or increasing the cardinality of your partition key to create more partitions. \n* Consider rate-limiting traffic to help prevent throttling exceptions by accessing over time.\n\n**What should I do if my request does not succeed due to a throttling exception?**\n\n* You can retry requests that do not succeed due to throttling exceptions. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
             }
         },
         {
@@ -510,13 +553,23 @@ Resources:
             "width": 6,
             "height": 6,
             "properties": {
+                "markdown": "\nPer Connection Request Rate Exceeded \n==\n\n Requests to Amazon Keyspaces that exceed the per-connection request rate quota. Each client connection to Amazon Keyspaces can support up to 3000 CQL requests per second. Clients can create multiple connections to increase throughput. \n* Consider increasing the number of local connections in your driver connection pool settings. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions. \n\n**What should I do if my request does not succeed due to a Per Connection Request Rate Exceeded error?**\n\n* First check to see if you are exceeding provisioned capacity or experiencing Storage Partition Throughput Capacity Exceeded errors. Second try rasing the number of connections in your driver connection pool settings based on your peak throughput. Additionally, you can increase the number of sessions or application instances to distribute request over more clients. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 42,
+            "width": 6,
+            "height": 6,
+            "properties": {
                 "markdown": "\nSystem Errors\n==\n\nThe requests to Amazon Keyspaces that generate a ServerError during the specified time period. A ServerError usually indicates an internal service error.\n\n**FAQ**\n\n**What should I do if my request does not succeed due to an internal service error?**\n\n* You can retry requests that do not succeed due to an internal service error. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n\n* * * * *\n"
             }
           },
         {
             "type": "text",
             "x": 18,
-            "y": 42,
+            "y": 48,
             "width": 6,
             "height": 6,
             "properties": {
@@ -526,9 +579,9 @@ Resources:
         {
             "type": "text",
             "x": 18,
-            "y": 48,
+            "y": 54,
             "width": 6,
-            "height": 6,
+            "height": 12,
             "properties": {
                 "markdown": "\n# Account Quotas\n\nReview default [Account Quotas](https://docs.aws.amazon.com/keyspaces/latest/devguide/quotas.html). You can view your service quotas in the [AWS Service Quotas console](https://console.aws.amazon.com/servicequotas/home#!/services/cassandra/quotas). \n\nAccountMaxWrites: The maximum number of read capacity units that can be used by an account. This limit does not apply to on-demand tables. \n\nAccountMaxReads: The maximum number of write capacity units that can be used by an account. This limit does not apply to on-demand tables or global secondary indexes. \n\nAccountMaxTableLevelWrites: The maximum number of write request units that can be used by a table of an account. For on-demand tables this limit caps the maximum write request units a table. \n\nAccountMaxTableLevelReads: The maximum number of read request units that can be used by a table of an account. For on-demand tables this limit caps the maximum read request units. \n"
             }
