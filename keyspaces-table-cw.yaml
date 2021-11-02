@@ -34,8 +34,10 @@ Resources:
             "properties": {
                 "metrics": [
                     [ { "expression": "m2/PERIOD(m2)", "label": "Consumed", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ],
+                    [ { "expression": "m3/PERIOD(m3)", "label": "TTLDeletes", "id": "e2", "region": "${CassandraRegion}", "color": "#d62728" } ],
                     [ "AWS/Cassandra", "ProvisionedWriteCapacityUnits", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", { "id": "m1", "label": "Provisioned", "color": "#1f77b4" } ],
-                    [ ".", "ConsumedWriteCapacityUnits", ".", ".", ".", ".", { "stat": "Sum", "id": "m2", "visible": false, "color": "#ff7f0e" } ]
+                    [ ".", "ConsumedWriteCapacityUnits", ".", ".", ".", ".", { "stat": "Sum", "id": "m2", "visible": false, "color": "#ff7f0e" } ],
+                    [ ".", "TTLDeletes", ".", ".", ".", ".", { "id": "m3", "color": "#e377c2", "stat": "Sum", "visible": false } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -197,7 +199,7 @@ Resources:
             "properties": {
                 "metrics": [
                     [ { "expression": "m1/PERIOD(m1)", "label": "SELECT", "id": "e1", "region": "${CassandraRegion}", "color": "#9467bd" } ],
-                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "label": "SELECT", "id": "m1", "color": "#9467bd" } ]
+                    [ "AWS/Cassandra", "UserErrors", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", "Operation", "SELECT", { "label": "SELECT", "id": "m1", "color": "#9467bd", "visible": false } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
