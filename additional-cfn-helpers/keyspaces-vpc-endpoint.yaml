@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: A sample template to create an Interface VPC endpoints (VPCE) for Amazon Keyspaces. This VPCE will enable private communication between your virtual private cloud (VPC) running in Amazon VPC and Amazon Keyspaces. Interface VPC endpoints are powered by AWS PrivateLink, which is an AWS service that enables private communication between VPCs and AWS services. See https://docs.aws.amazon.com/keyspaces/latest/devguide/vpc-endpoints.html
+Parameters:
+  CassandraRegion:
+    Type: String
+    Default: us-east-1
+    Description: The AWS region for your Amazon Keyspaces' Resources. Check for region availablity https://docs.aws.amazon.com/keyspaces/latest/devguide/programmatic.endpoints.html
+    AllowedValues :
+      - us-east-1
+      - us-east-2
+      - us-west-1
+      - us-west-2
+      - af-south-1
+      - ap-east-1
+      - ap-south-1
+      - ap-northeast-3
+      - ap-northeast-2
+      - ap-southeast-1
+      - ap-southeast-2
+      - ap-northeast-1
+      - ca-central-1
+      - cn-north-1
+      - cn-northwest-1
+      - eu-central-1
+      - eu-west-1
+      - eu-west-2
+      - eu-south-1
+      - eu-west-3
+      - eu-north-1
+      - me-south-1
+      - sa-east-1
+      - us-gov-east-1
+      - us-gov-west-1
+  VPCId:
+    Type: AWS::EC2::VPC::Id
+    Description: The VPC where you want to create a private VPC endpoint to Amazon Keyspaces
+  VpcSubnetList:
+     Type : List<AWS::EC2::Subnet::Id>
+     Description: Creates an additional peer for each subnet listed for each availability zone where a VPC endpoint is available. Check for availablity zone support.
+  SecurityGroupId:
+      Type: AWS::EC2::SecurityGroup::Id
+      Description: Security group associated with the endpoint.
+Resources:
+  PrivateVPCEndpoint:
+      Type: AWS::EC2::VPCEndpoint
+      Properties:
+        ServiceName: !Sub 'com.amazonaws.${CassandraRegion}.cassandra'
+        PrivateDnsEnabled: True
+        SecurityGroupIds:
+          - !Ref SecurityGroupId
+        SubnetIds: !Split [',', !Join [',', !Ref VpcSubnetList]]
+        VpcEndpointType: Interface
+        VpcId: !Ref VPCId
