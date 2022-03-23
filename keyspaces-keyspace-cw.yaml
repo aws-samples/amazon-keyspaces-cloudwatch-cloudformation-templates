@@ -282,7 +282,7 @@ Resources:
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "SEARCH(\u0027{AWS/Cassandra,Keyspace,TableName, Operation} Keyspace=\"${CassandraKeyspaceParameter}\" MetricName=\"SystemErrors\"\u0027, \u0027Sum\u0027, 300)", "label": "\u0024{PROP(\u0027Dim.Operation\u0027)} \u0024{PROP(\u0027Dim.TableName\u0027)}", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ]
+                    [ { "expression": "SEARCH(\u0027{AWS/Cassandra,Keyspace,TableName, Operation} Keyspace=\"${CassandraKeyspaceParameter}\" NOT Operation=\"SELECT\" MetricName=\"SystemErrors\" \u0027, \u0027Sum\u0027, 300)", "label": "\u0024{PROP(\u0027Dim.Operation\u0027)} \u0024{PROP(\u0027Dim.TableName\u0027)}", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -300,7 +300,7 @@ Resources:
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "SEARCH(\u0027{AWS/Cassandra,Keyspace,TableName, Operation} Keyspace=\"${CassandraKeyspaceParameter}\" MetricName=\"SystemErrors\"\u0027, \u0027Sum\u0027, 300)", "label": "\u0024{PROP(\u0027Dim.TableName\u0027)}", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ]
+                    [ { "expression": "SEARCH(\u0027{AWS/Cassandra,Keyspace,TableName, Operation} Keyspace=\"${CassandraKeyspaceParameter}\" Operation=\"SELECT\" MetricName=\"SystemErrors\"\u0027, \u0027Sum\u0027, 300)", "label": "\u0024{PROP(\u0027Dim.TableName\u0027)}", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
