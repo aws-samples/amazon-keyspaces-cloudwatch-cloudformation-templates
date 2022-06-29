@@ -112,7 +112,7 @@ Resources:
         {
             "type": "metric",
             "x": 0,
-            "y": 18,
+            "y": 12,
             "width": 9,
             "height": 6,
             "properties": {
@@ -132,8 +132,8 @@ Resources:
         {
             "type": "metric",
             "x": 9,
-            "y": 18,
-            "width": 6,
+            "y": 12,
+            "width": 9,
             "height": 6,
             "properties": {
                 "metrics": [
@@ -149,9 +149,27 @@ Resources:
         },
         {
             "type": "metric",
-            "x": 15,
+            "x": 0,
             "y": 18,
-            "width": 3,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/Cassandra", "BillableTableSizeInBytes", "TableName", "${CassandraTableParameter}", "Keyspace", "${CassandraKeyspaceParameter}", { "color": "#e377c2"} ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "${CassandraRegion}",
+                "title": "Billable Table Size",
+                "period": 300,
+                "stat": "Average"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 18,
+            "width": 9,
             "height": 6,
             "properties": {
                 "metrics": [
@@ -520,17 +538,17 @@ Resources:
             "width": 6,
             "height": 6,
             "properties": {
-                "markdown": "\nRequest Latency\n==\n\nThe successful requests to Amazon Keyspaces during the specified time period. *SuccessfulRequestLatency* can provide two different kinds of information:\n\n- The elapsed time for successful requests (*Minimum*, *Maximum*, *Sum*, or *Average*).\n\n*SuccessfulRequestLatency* reflects activity only within Amazon Keyspaces and does not take into account network latency or client-side activity.\n"
+                "markdown": "\nRequest Latency\n==\n\nThe latency of successful requests to Amazon Keyspaces during the specified time period. *SuccessfulRequestLatency* can provide two different kinds of information:\n\n- The elapsed time for successful requests (*Minimum*, *Maximum*, *Sum*, or *Average*).\n\n*SuccessfulRequestLatency* reflects activity only within Amazon Keyspaces and does not take into account network latency or client-side activity.\n"
             }
         },
         {
-            "type": "text",
+            "height": 6,
+            "width": 6,
             "x": 18,
             "y": 18,
-            "width": 6,
-            "height": 6,
+            "type": "text",
             "properties": {
-                "markdown": "\nUser errors\n==\nUser errors indicates a client-side error, such as an invalid combination of parameters, an attempt to update a nonexistent table, or an incorrect request signature.\n\nExamples of user errors:\n\n* Exceeding account quota for table capacity\n* Exceeding account quota for account capacity\n* Exceeding provisioned capacity rate\n* Invalid CQL syntax\n* Table not found\n\n\n\n\n\n \n"
+                "markdown": "\nBillableTableSizeInBytes\n==\n\nThe billable size of the table in bytes. It is the sum of the encoded size of all rows in the table. This metric helps you track your table storage costs over time.\n\n* Average – The average storage size of the table. This metric is calculated over 4 - 6 hour intervals.\n\nReturnedItemCountBySelect\n==\nThe number of rows returned by multi-row SELECT queries during the specified time period. Multi-row SELECT queries are queries which do not contain the fully qualified primary key, such a full table scans and range queries.\n\nThe number of rows returned is not necessarily the same as the number of rows that were evaluated. For example, suppose that you requested a SELECT * with ALLOW FILTERING on a table that had 100 rows, but specified a WHERE clause that narrowed the results so that only 15 rows were returned. In this case, the response from SELECT would contain a ScanCount of 100 and a Count of 15 returned rows."
             }
         },
         {
@@ -540,7 +558,7 @@ Resources:
             "width": 6,
             "height": 6,
             "properties": {
-                "markdown": "\nThrottleEvents\n==\nThe following metric will display number of WriteThrottleExceptions or ReadThrottleExceptions when exceeding capacity. The application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions\n\n## FAQ\n\n#### How do I reduce errors as a result of exceeding provisioned capacity?\n* Turn on Auto-Scaling\n* Increase Current Provisioned Capacity\n* Decrease Target Capacity in Auto-Scaling Policy\n* Increase Mix/Max Capacity in Auto-Scaling Policy\n* Distribute Access over time\n\n#### What are some strategies for the application respond? \n* Retry \n* Retry with [Exponential Back-off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)\n"
+                "markdown": "\nUser errors\n==\nUser errors indicates a client-side error, such as an invalid combination of parameters, an attempt to update a nonexistent table, or an incorrect request signature.\n\nExamples of user errors:\n\n* Exceeding account quota for table capacity\n* Exceeding account quota for account capacity\n* Exceeding provisioned capacity rate\n* Invalid CQL syntax\n* Table not found\n\n\n\n\n\n \n"
             }
         },
         {
@@ -550,7 +568,7 @@ Resources:
             "width": 6,
             "height": 6,
             "properties": {
-                "markdown": "\nStorage Partition Throughput Capacity Exceeded \n==\n\n Requests to an Amazon Keyspaces storage partition that exceed the throughput capacity of the partition. Amazon Keyspaces storage partitions can support up to 1000 WCU/WRU per second or 3000 RCU/RRU per second, or a linear combination of the two. Logical Amazon Keyspaces partitions can span multiple storage partitions and are virtually unbounded in size. We recommend reviewing your data model to distribute read/write traffic across more Amazon Keyspaces logical partitions. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions.\n\n**FAQ**\n\n**How do I resolve imbalanced access in my application?**\n\n* You can resolve imbalanced access in your application by distributing traffic over partitions more evenly. \n* Consider randomizing reads and writes across partition keys or increasing the cardinality of your partition key to create more partitions. \n* Consider rate-limiting traffic to help prevent throttling exceptions by accessing over time.\n\n**What should I do if my request does not succeed due to a throttling exception?**\n\n* You can retry requests that do not succeed due to throttling exceptions. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
+                "markdown": "\nThrottleEvents\n==\nThe following metric will display number of WriteThrottleExceptions or ReadThrottleExceptions when exceeding capacity. The application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions\n\n## FAQ\n\n#### How do I reduce errors as a result of exceeding provisioned capacity?\n* Turn on Auto-Scaling\n* Increase Current Provisioned Capacity\n* Decrease Target Capacity in Auto-Scaling Policy\n* Increase Mix/Max Capacity in Auto-Scaling Policy\n* Distribute Access over time\n\n#### What are some strategies for the application respond? \n* Retry \n* Retry with [Exponential Back-off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)\n"
             }
         },
         {
@@ -560,7 +578,7 @@ Resources:
             "width": 6,
             "height": 6,
             "properties": {
-                "markdown": "\nPer Connection Request Rate Exceeded \n==\n\n Requests to Amazon Keyspaces that exceed the per-connection request rate quota. Each client connection to Amazon Keyspaces can support up to 3000 CQL requests per second. Clients can create multiple connections to increase throughput. \n* Consider increasing the number of local connections in your driver connection pool settings. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions. \n\n**What should I do if my request does not succeed due to a Per Connection Request Rate Exceeded error?**\n\n* First check to see if you are exceeding provisioned capacity or experiencing Storage Partition Throughput Capacity Exceeded errors. Second try rasing the number of connections in your driver connection pool settings based on your peak throughput. Additionally, you can increase the number of sessions or application instances to distribute request over more clients. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
+                "markdown": "\nStorage Partition Throughput Capacity Exceeded \n==\n\n Requests to an Amazon Keyspaces storage partition that exceed the throughput capacity of the partition. Amazon Keyspaces storage partitions can support up to 1000 WCU/WRU per second or 3000 RCU/RRU per second, or a linear combination of the two. Logical Amazon Keyspaces partitions can span multiple storage partitions and are virtually unbounded in size. We recommend reviewing your data model to distribute read/write traffic across more Amazon Keyspaces logical partitions. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions.\n\n**FAQ**\n\n**How do I resolve imbalanced access in my application?**\n\n* You can resolve imbalanced access in your application by distributing traffic over partitions more evenly. \n* Consider randomizing reads and writes across partition keys or increasing the cardinality of your partition key to create more partitions. \n* Consider rate-limiting traffic to help prevent throttling exceptions by accessing over time.\n\n**What should I do if my request does not succeed due to a throttling exception?**\n\n* You can retry requests that do not succeed due to throttling exceptions. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
             }
         },
         {
@@ -570,13 +588,23 @@ Resources:
             "width": 6,
             "height": 6,
             "properties": {
+                "markdown": "\nPer Connection Request Rate Exceeded \n==\n\n Requests to Amazon Keyspaces that exceed the per-connection request rate quota. Each client connection to Amazon Keyspaces can support up to 3000 CQL requests per second. Clients can create multiple connections to increase throughput. \n* Consider increasing the number of local connections in your driver connection pool settings. Your application will see these errors as WriteTimeoutExceptions or ReadTimeoutExceptions. \n\n**What should I do if my request does not succeed due to a Per Connection Request Rate Exceeded error?**\n\n* First check to see if you are exceeding provisioned capacity or experiencing Storage Partition Throughput Capacity Exceeded errors. Second try rasing the number of connections in your driver connection pool settings based on your peak throughput. Additionally, you can increase the number of sessions or application instances to distribute request over more clients. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 48,
+            "width": 6,
+            "height": 6,
+            "properties": {
                 "markdown": "\nSystem Errors\n==\n\nThe requests to Amazon Keyspaces that generate a ServerError during the specified time period. A ServerError usually indicates an internal service error.\n\n**FAQ**\n\n**What should I do if my request does not succeed due to an internal service error?**\n\n* You can retry requests that do not succeed due to an internal service error. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n\n* * * * *\n"
             }
           },
         {
             "type": "text",
             "x": 18,
-            "y": 48,
+            "y": 54,
             "width": 6,
             "height": 6,
             "properties": {
@@ -586,7 +614,7 @@ Resources:
         {
             "type": "text",
             "x": 18,
-            "y": 54,
+            "y": 60,
             "width": 6,
             "height": 12,
             "properties": {
