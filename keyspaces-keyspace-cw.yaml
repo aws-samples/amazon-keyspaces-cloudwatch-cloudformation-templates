@@ -137,7 +137,7 @@ Resources:
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ { "expression": "SEARCH(\u0027{AWS/Cassandra,Keyspace,TableName} Keyspace=\"tlp_stress\" MetricName=\"BillableTableSizeInBytes\"\u0027, \u0027Average\u0027, 300)", "label": "\u0024{PROP(\u0027Dim.TableName\u0027)}", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ],
+                    [ { "expression": "SEARCH(\u0027{AWS/Cassandra,Keyspace,TableName} Keyspace=\"${CassandraKeyspaceParameter}\" MetricName=\"BillableTableSizeInBytes\"\u0027, \u0027Average\u0027, 300)", "label": "\u0024{PROP(\u0027Dim.TableName\u0027)}", "id": "e1", "region": "${CassandraRegion}", "color": "#2ca02c" } ],
                     [ { "expression": "SUM(e1)", "label": "${CassandraKeyspaceParameter} Total", "id": "e2", "region": "${CassandraRegion}" }]
                 ],
                 "view": "singleValue",
