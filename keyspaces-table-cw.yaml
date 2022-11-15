@@ -446,6 +446,52 @@ Resources:
             "type": "metric",
             "x": 0,
             "y": 60,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                        [ { "expression": "SELECT SUM(ActiveConnections) FROM SCHEMA(\"AWS/PrivateLinkEndpoints\", \"Endpoint Type\",\"Service Name\",\"Subnet Id\",\"VPC Endpoint Id\",\"VPC Id\") WHERE \"Service Name\" = \u0027com.amazonaws.${CassandraRegion}.cassandra\u0027 GROUP BY \"VPC Id\", \"Subnet Id\"", "label": "\u0024{LABEL}", "id": "q1", "stat": "Sum" } ]],
+                "view": "timeSeries",
+                "stacked": false,
+                "title": "VPC Endpoint / ActiveConnections",
+                "region": "${CassandraRegion}",
+                "stat": "Sum",
+                "yAxis": {
+                    "left": {
+                        "label": "Count",
+                        "showUnits": false
+                    }
+                },
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 60,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                      [ { "expression": "SELECT SUM(BytesProcessed) FROM SCHEMA(\"AWS/PrivateLinkEndpoints\", \"Endpoint Type\",\"Service Name\",\"Subnet Id\",\"VPC Endpoint Id\",\"VPC Id\") WHERE \"Service Name\" = \u0027com.amazonaws.${CassandraRegion}.cassandra\u0027 GROUP BY \"VPC Id\", \"Subnet Id\"", "label": "\u0024{LABEL}", "id": "q1", "stat": "Sum" } ]],
+                "view": "timeSeries",
+                "stacked": false,
+                "title": "VPC Endpoint / BytesProcessed",
+                "region": "${CassandraRegion}",
+                "stat": "Sum",
+                "yAxis": {
+                    "left": {
+                        "label": "Bytes",
+                        "showUnits": false
+                    }
+                },
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 66,
             "width": 6,
             "height": 6,
             "properties": {
@@ -468,7 +514,7 @@ Resources:
         {
             "type": "metric",
             "x": 6,
-            "y": 60,
+            "y": 66,
             "width": 6,
             "height": 6,
             "properties": {
@@ -601,6 +647,7 @@ Resources:
                 "markdown": "\nSystem Errors\n==\n\nThe requests to Amazon Keyspaces that generate a ServerError during the specified time period. A ServerError usually indicates an internal service error.\n\n**FAQ**\n\n**What should I do if my request does not succeed due to an internal service error?**\n\n* You can retry requests that do not succeed due to an internal service error. \n* Consider using a retry policy with exponential back off. Learn more about [Exponential back off](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) and Jitter.\n\n* * * * *\n"
             }
           },
+
         {
             "type": "text",
             "x": 18,
@@ -615,6 +662,16 @@ Resources:
             "type": "text",
             "x": 18,
             "y": 60,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "VPC Endpoint metrics\n==\n**ActiveConnections and BytesProcessed**\n\nWhen connecting to Amazon Keyspaces with VPCE the number of connections is determined by the number of (vpc endpoints * number of driver configured local connections) + one control connection per session. Each connection has the ability to perform up to 3000 request per second. If you see PerConnectionRequestRateExceeded events you may need to specify more connections. You should see ActiveConnections and BytesProcessed distributed evenly across availablity zones. If connections or traffic is skewed, then you may not have setup VPCE endpoints or driver configurations according to [best practices](https://docs.aws.amazon.com/keyspaces/latest/devguide/vpc-endpoints.html)"
+            }
+        },
+        {
+            "type": "text",
+            "x": 18,
+            "y": 66,
             "width": 6,
             "height": 12,
             "properties": {
